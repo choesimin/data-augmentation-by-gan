@@ -21,10 +21,10 @@ matplotlib.style.use('ggplot')
 ###########################################
 
 # learning parameters
-batch_size = 1024
-learning_rate_g = 0.0003
-learning_rate_d = 0.0002
-epochs = 600
+batch_size = 256
+learning_rate_g = 0.0001
+learning_rate_d = 0.00005
+epochs = 1200
 count = ""
 
 ###########################################
@@ -223,6 +223,7 @@ for epoch in range(epochs):
     print(f"Generator loss: {epoch_loss_g:.8f}, Discriminator loss: {epoch_loss_d:.8f}")
 
 print('DONE TRAINING')
+
 torch.save(generator.state_dict(), "results/" + directory + '/generator.pth')
 
 # save the generated images as GIF file
@@ -239,11 +240,12 @@ plt.savefig("losses/" + directory + ".jpg")
 
 path = 'results_gray\\' + directory
 imagePaths = [os.path.join(path,file_name) for file_name in os.listdir(path)]
+
 for imagePath in imagePaths:
     img = Image.open(imagePath).convert('L')
     img_numpy = np.array(img, 'uint8')
     cv2.imwrite("results_gray\\" + directory + "\\" + imagePath.split("\\")[-1], img_numpy)
-imageio.mimsave("results_gray/" + directory + '/generator_images.gif', imgs)
+
 print("DONE Converting To Gray")
 
 
