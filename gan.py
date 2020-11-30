@@ -16,8 +16,8 @@ matplotlib.style.use('ggplot')
 
 # learning parameters
 batch_size = 512
-learning_rate_g = 0.00005
-learning_rate_d = 0.00005
+learning_rate_g = 0.0003
+learning_rate_d = 0.0001
 epochs = 300
 
 
