@@ -17,14 +17,13 @@ from PIL import Image
 
 matplotlib.style.use('ggplot')
 
-
 ###########################################
 
 # learning parameters
-batch_size = 256
+batch_size = 128
 learning_rate_g = 0.0001
 learning_rate_d = 0.00005
-epochs = 1200
+epochs = 3600
 count = ""
 
 ###########################################
