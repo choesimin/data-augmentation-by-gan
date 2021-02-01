@@ -31,7 +31,7 @@ DCNN에 활용하기 위해 time-series weable motion data를 Tensor로, Tensor�
 
 연구는 GAN 기반의 data augmentation을 할 때, 여러 input parameter에 변화를 주는 방식으로 진행하며, 각 경우의 특징을 고찰하고 분석한다.
 
-GAN의 종류에는 기존의 Vanilla GAN에서 각 환경에 맞추어 발전한 형태인 DCGAN, DeliGAN, MGAN, SRGAN 등등 이 밖에도 여러 가지가 있다. 그러나 본 논문에서는 input parameter 조정에 따른 model performance 변화에 중점을 두기 때문에 가장 기본적인 Vanilla GAN에 2214 크기의 대상 data를 사용해 진행한다.
+GAN의 종류에는 기존의 Vanilla GAN에서 각 환경에 맞추어 발전한 형태인 DCGAN, DeliGAN, MGAN, SRGAN 등등 이 밖에도 여러 가지가 있다. 그러나 본 논문에서는 input parameter 조정에 따른 model performance 변화에 중점을 두기 때문에 가장 기본적인 Vanilla GAN에 22*14 크기의 대상 data를 사용해 진행한다.
 
 - 개발 언어 : python3.8
 - Library : PyTorch
@@ -87,20 +87,44 @@ epoch도 batch size와 마찬가지로 적절한 결과를 얻기 위해서는 �
 ### 2.3 Training Dataset
 본 연구에서 사용하는 Train DataSet은 time-series weable motion data를 담고있는 image들이다. DCNN에 활용하기 위해 pre-processing하여 2214 pixel image로 변환한 것이며, 총 4가지 Label, (2, 3, 4, 5)로 분류된다.
 
-아래의 이미지는 pre-processing이 된 image를 보기 편하게 표현해놓은 것이며, 실제 data는 22*14 크기이기 때문에 육안으로는 작고 흐릿하게 보인다.
+[Fig. 2-2]는 pre-processing이 된 image를 보기 편하게 표현해놓은 것이며, 실제 data는 22*14 크기이기 때문에 육안으로는 작고 흐릿하게 보인다.
 
+
+사진
+
+
+[Fig. 2-3]는 time-series data를 이용하여 규칙성이 있게 그라데이션 형태를 띄도록 만들어낸 image이다. network가 각 label의 image 특징을 추출하여 규칙성을 찾아내는 것이 model performance를 좌우할 것이다.
 
 
 
 ## 3. Data augmentation
+batch size, epoch, learning rate를 조정하며, training dataset에 대한 최적값을 찾는다.
+
 ### 3.1 Case01 : Initial Condition
+
+
 ### 3.2 Case02 : Changed Learning rate of G & D
+
+
 ### 3.3 Case03 : Changed Learning rate of G
+
+
 ### 3.4 Case04 : Changed Batch Size
+
+
 ### 3.5 Final Case : Changed Epochs
+
+
 #### 3.5.1 구간 분석
+
 #### 3.5.2 Training data & Output 비교
+
+
 ##### 3.5.2.1 Training data
+
+
 ##### 3.5.2.2 Output
+
+
 
 ## 4. 결 론
