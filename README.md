@@ -179,16 +179,64 @@ Generator model performance가 Discriminator model performance를 따라잡아 G
 Generator와 Discriminator이 model performance가 완전히 균형을 이루는 구간이다. 이 구간에서는 학습이 거의 일어나지 않는다.
 
 
-
-
 #### 3.5.2 Training data & Output 비교
 
-
 ##### 3.5.2.1 Training data
+[label2]
+![Fig  3-7  label2 image1](https://user-images.githubusercontent.com/40753595/106431779-3a998900-641a-11eb-8a87-d957a9d8164c.png)
+![Fig  3-8  label2 image2](https://user-images.githubusercontent.com/40753595/106431783-3bcab600-641a-11eb-8080-060352bc53ff.png)
+
+
+[label3]
+![Fig  3-9  label3 image1](https://user-images.githubusercontent.com/40753595/106431787-3cfbe300-641a-11eb-998b-a4c3ebafeac8.png)
+![Fig  3-10  label3 image2](https://user-images.githubusercontent.com/40753595/106431791-3e2d1000-641a-11eb-8191-dc5934a32279.png)
+
+[label4]
+![Fig  3-11  label4 image1](https://user-images.githubusercontent.com/40753595/106431795-3ec5a680-641a-11eb-81db-90f51cd81db0.png)
+![Fig  3-12  label4 image2](https://user-images.githubusercontent.com/40753595/106431799-3ff6d380-641a-11eb-979f-6d52de4025a0.png)
+
+[label5]
+![Fig  3-13  label5 image1](https://user-images.githubusercontent.com/40753595/106431802-41280080-641a-11eb-9e82-db4998ce98c6.png)
+![Fig  3-14  label5 image2](https://user-images.githubusercontent.com/40753595/106431806-42592d80-641a-11eb-9741-8de9d5f6db92.png)
+
+
+label2 : 흑, 백의 가로선들이 번갈아 나온다.
+label3 : 흑, 백의 점들이 산재되어있다.
+label4 : 줄무늬가 두껍게 나타나며, 줄무늬 사이에 점이 박혀있다.
+label5 : label2와 비슷하나, 갈라지거나 합쳐지는 등, 조금 더 불규칙하다.
 
 
 ##### 3.5.2.2 Output
+[original output]
+![Fig  3-15  output original](https://user-images.githubusercontent.com/40753595/106431808-42f1c400-641a-11eb-8256-01a0686ab4b7.png)
 
+[converted output]
+![Fig  3-16  output converted](https://user-images.githubusercontent.com/40753595/106431815-4422f100-641a-11eb-99bf-b2b0b56dbe50.png)
+
+[Fig. 3-15]는 GAN을 통해 얻은 output이며, [Fig. 3-16]은 특징을 육안으로 판별하기 편하도록 명암과 채도를 조정한 image이다. 또한 output을 구성하는 64개의 image들은 label 2, 3, 4, 5를 모방한 image로써 랜덤으로 배치되었다.
+ 
+label2, label3은 특징이 뚜렷하여 output 내에서 구별이 어느정도 가능하지만, label4, label5는 특징을 규정짓기 어려워 제대로 생성된 것인지 육안으로 확인하기 어렵다.
+
+특징을 규정한다는 행위는 deep learning의 training 과정에서도 일어나며, 따라서 더 복잡한 규칙을 가진 label 4, 5는 label 2, 3만큼 image generating performance가 나오지 않았을 것으로 추측한다.
 
 
 ## 4. 결 론
+본 논문에서는 multi-dimentional time-series wearable motion data를 대상으로 하는 GAN기반 data augmentation의 가능성을 연구하였다. pytorch를 사용하여 code를 작성했고, 실험을 통해 signal로부터 image로 변환된 data를 augmentation할 수 있다는 것을 확인하였다. 
+
+실험은 input parameter를 조정하며 적정값을 찾아가는 방식으로 진행했으며, 값 조정에 따른 loss graph의 변화에 중점을 두었다.
+
+learning rate를 변화시켜가며 실험한 결과, Generator보다 Discriminator의 learning rate를 작게 설정했을 때, 두 model의 performance가 균형있게 발전하는 것을 확인할 수 있었다. 이것은 Generator의 학습 속도보다 Discriminator의 학습 속도가 초기에 더 빨랐기 때문이다.
+batch size를 변화시켜가며 실험한 결과, 초기값보다 작게 설정했을 때, loss값의 변동이 안정적으로 되었다. batch size를 줄이는 것은 learning rate를 줄이는 것과 비슷한 효과를 내었는데, 한번에 더 적은 data를 대상으로 학습하는 것이 model의 지나친 변화를 억제해주었기 때문이다.
+
+output으로 나온 image의 사용 목적은 DCNN의 training data로 이용하기 위함이다. 더 정확한 검증을 위해서는 생성된 image data를 signal data로 역변환하여 판단하지만, 본 논문에서는 다루지 않는다.
+
+본 연구에서는 GAN의 가장 기본적인 형태의 vanilla GAN을 사용하여 가능성을 탐색하였고, 더 발전한 형태의 DCGAN, LSGAN 등을 통해 더 높은 성능의 model을 만들어 낼 수 있을 것이라 전망한다.
+
+
+## 참고 문헌
+[1] Zhang, X., Pan, X., Wang, G., Zhou, D., Tool Runout and Single-Edge Cutting in Micro-Milling, The International Journal of Advanced Manufacturing Technology, Vol. 96, No. 1, pp. 821-832, 2018.
+
+[2] Hong, G., Author2, Author3, Author4, Title, Journal Full Name, Vol. 1, No. 2(issue number 없을시 삭제), pp. 123-145, 2019.
+
+[3] G. Hong, Author2, Author3, Author4, Book Title, Publisher, 2019, pp. 123-145.
+
