@@ -1,4 +1,5 @@
 # GAN based data augmentation approach of multi-featured and multi-dimensional time-series wearable motion data for robust HMR with DCNN
+# 다기능 다차원 시계열 모션 데이터의 GAN 기반 데이터 증식 처리법
 
 In this paper, GAN-based data augmentation is the subject of study to use multi-feathered and multi-dimensional time-series wearable motion data for DCNN. 
 
@@ -7,6 +8,8 @@ For the study, vanilla GAN implemented by Pytorch open source library was used, 
 Research has shown how the application of GAN works on data converted from sign to image. The results showed that there was not enough quality to be used, even if it had some effect.
 
 However, assuming that more advanced form of DCGAN or yLSGAN is used, the output is expected to be available as the actual training data.
+
+------------------------------------------------------------------------------------------------------------------------------
 
 ## 1. 서론
 
@@ -36,6 +39,8 @@ GAN의 종류에는 기존의 Vanilla GAN에서 각 환경에 맞추어 발전�
 - 개발 언어 : python3.8
 - Library : PyTorch
 - OS : Windows10
+
+------------------------------------------------------------------------------------------------------------------------------
 
 ## 2. 배경 이론
 
@@ -84,22 +89,26 @@ epoch을 적정 횟수보다 작게 설정하면 모델이 너무 단순해져 l
 
 epoch도 batch size와 마찬가지로 적절한 결과를 얻기 위해서는 반복된 실험이 필요하다.
 
+
 ### 2.3 Training Dataset
 본 연구에서 사용하는 Train DataSet은 time-series weable motion data를 담고있는 image들이다. DCNN에 활용하기 위해 pre-processing하여 2214 pixel image로 변환한 것이며, 총 4가지 Label, (2, 3, 4, 5)로 분류된다.
 
 [Fig. 2-3]는 pre-processing이 된 image를 보기 편하게 표현해놓은 것이며, 실제 data는 22*14 크기이기 때문에 육안으로는 작고 흐릿하게 보인다.
 
 ![Fig  2-3  sample data](https://user-images.githubusercontent.com/40753595/106431748-32414e00-641a-11eb-8147-517c742803ab.png)
+[Fig  2-3  sample data]
 
 [Fig. 2-3]는 time-series data를 이용하여 규칙성이 있게 그라데이션 형태를 띄도록 만들어낸 image이다. network가 각 label의 image 특징을 추출하여 규칙성을 찾아내는 것이 model performance를 좌우할 것이다.
 
-
+------------------------------------------------------------------------------------------------------------------------------
 
 ## 3. Data augmentation
 batch size, epoch, learning rate를 조정하며, training dataset에 대한 최적값을 찾는다.
 
 ### 3.1 Case01 : Initial Condition
 ![Fig  3-1  Case01 loss graph](https://user-images.githubusercontent.com/40753595/106431750-33727b00-641a-11eb-9440-e06d328f8103.png)
+[Fig  3-1  Case01 loss graph]
+
 - batch_size = 512
 - learning_rate_g = 0.0002
 - learning_rate_d = 0.0002
@@ -109,8 +118,11 @@ Generator의 loss가 초반에 요동친다.
 이는 learning rate가 적정치보다 높아 loss를 계산하는 함수가 수렴하지 못하고 커지는 방향으로 최적화가 이루어졌다고 볼 수 있다.
 따라서 Generator와 Discriminator의 learning rate를 낮추어 진행한다.
 
+
 ### 3.2 Case02 : Changed Learning rate of G & D
 ![Fig  3-2  Case02 loss graph](https://user-images.githubusercontent.com/40753595/106431753-34a3a800-641a-11eb-920c-ab4171c9763d.png)
+[Fig  3-2  Case02 loss graph]
+
 - batch_size = 512
 - learning_rate_g = 0.0001
 - learning_rate_d = 0.0001
@@ -121,8 +133,11 @@ Discrimicator의 loss가 epochs 100 지점 부터 변화가 거의 없는데, �
 그러나 Case01에서는 Genorator가 Discriminator의 학습 속도를 따라가지 못하고 있다. Discriminator model performance가 지나치게 좋아졌기 때문에 loss값이 0으로 수렴했기 때문이다.
 따라서 Discriminator의 learning rate를 Generator의 learning rate보다 작게 설정해 Discriminator가 Generator보다 천천히 학습하도록 한다.
 
+
 ### 3.3 Case03 : Changed Learning rate of G
 ![Fig  3-3  Case03 loss graph](https://user-images.githubusercontent.com/40753595/106431757-35d4d500-641a-11eb-9e73-e8e28876669e.png)
+[Fig  3-3  Case03 loss graph]
+
 - batch_size = 512
 - learning_rate_g = 0.00005
 - learning_rate_d = 0.0001
@@ -136,6 +151,8 @@ Deep Learning에서 batch size 512는 보편적으로 큰 값이라 평가받는
 
 ### 3.4 Case04 : Changed Batch Size
 ![Fig  3-4  Case04 loss graph](https://user-images.githubusercontent.com/40753595/106431763-379e9880-641a-11eb-8bb4-b9a4f9409564.png)
+[Fig  3-4  Case04 loss graph]
+
 - batch_size = 256
 - learning_rate_g = 0.00005
 - learning_rate_d = 0.0001
@@ -149,6 +166,7 @@ batch size를 줄이는 것이 학습에 긍정적인 영향을 주었다. loss�
 
 ### 3.5 Final Case : Changed Epochs
 ![Fig  3-5  Final Case_1 loss graph](https://user-images.githubusercontent.com/40753595/106431767-38372f00-641a-11eb-9158-d5587ac213fa.png)
+[Fig  3-5  Final Case_1 loss graph]
 
 - batch_size = 256
 - learning_rate_g = 0.00005
@@ -156,6 +174,8 @@ batch size를 줄이는 것이 학습에 긍정적인 영향을 주었다. loss�
 - epochs = 1200
 
 ![Fig  3-6  Final Case_2 loss graph](https://user-images.githubusercontent.com/40753595/106431775-39685c00-641a-11eb-973d-2212f708d6a1.png)
+[Fig  3-6  Final Case_2 loss graph]
+
 - batch_size = 256
 - learning_rate_g = 0.00005
 - learning_rate_d = 0.0001
@@ -182,23 +202,22 @@ Generator와 Discriminator이 model performance가 완전히 균형을 이루는
 #### 3.5.2 Training data & Output 비교
 
 ##### 3.5.2.1 Training data
-[label2]
+
 ![Fig  3-7  label2 image1](https://user-images.githubusercontent.com/40753595/106431779-3a998900-641a-11eb-8a87-d957a9d8164c.png)
 ![Fig  3-8  label2 image2](https://user-images.githubusercontent.com/40753595/106431783-3bcab600-641a-11eb-8080-060352bc53ff.png)
+[label2]
 
-
-[label3]
 ![Fig  3-9  label3 image1](https://user-images.githubusercontent.com/40753595/106431787-3cfbe300-641a-11eb-998b-a4c3ebafeac8.png)
 ![Fig  3-10  label3 image2](https://user-images.githubusercontent.com/40753595/106431791-3e2d1000-641a-11eb-8191-dc5934a32279.png)
+[label3]
 
-[label4]
 ![Fig  3-11  label4 image1](https://user-images.githubusercontent.com/40753595/106431795-3ec5a680-641a-11eb-81db-90f51cd81db0.png)
 ![Fig  3-12  label4 image2](https://user-images.githubusercontent.com/40753595/106431799-3ff6d380-641a-11eb-979f-6d52de4025a0.png)
+[label4]
 
-[label5]
 ![Fig  3-13  label5 image1](https://user-images.githubusercontent.com/40753595/106431802-41280080-641a-11eb-9e82-db4998ce98c6.png)
 ![Fig  3-14  label5 image2](https://user-images.githubusercontent.com/40753595/106431806-42592d80-641a-11eb-9741-8de9d5f6db92.png)
-
+[label5]
 
 label2 : 흑, 백의 가로선들이 번갈아 나온다.
 label3 : 흑, 백의 점들이 산재되어있다.
@@ -207,11 +226,11 @@ label5 : label2와 비슷하나, 갈라지거나 합쳐지는 등, 조금 더 �
 
 
 ##### 3.5.2.2 Output
-[original output]
 ![Fig  3-15  output original](https://user-images.githubusercontent.com/40753595/106431808-42f1c400-641a-11eb-8256-01a0686ab4b7.png)
+[Fig  3-15  output original]
 
-[converted output]
 ![Fig  3-16  output converted](https://user-images.githubusercontent.com/40753595/106431815-4422f100-641a-11eb-99bf-b2b0b56dbe50.png)
+[Fig  3-16  output converted]
 
 [Fig. 3-15]는 GAN을 통해 얻은 output이며, [Fig. 3-16]은 특징을 육안으로 판별하기 편하도록 명암과 채도를 조정한 image이다. 또한 output을 구성하는 64개의 image들은 label 2, 3, 4, 5를 모방한 image로써 랜덤으로 배치되었다.
  
@@ -219,6 +238,7 @@ label2, label3은 특징이 뚜렷하여 output 내에서 구별이 어느정도
 
 특징을 규정한다는 행위는 deep learning의 training 과정에서도 일어나며, 따라서 더 복잡한 규칙을 가진 label 4, 5는 label 2, 3만큼 image generating performance가 나오지 않았을 것으로 추측한다.
 
+------------------------------------------------------------------------------------------------------------------------------
 
 ## 4. 결 론
 본 논문에서는 multi-dimentional time-series wearable motion data를 대상으로 하는 GAN기반 data augmentation의 가능성을 연구하였다. pytorch를 사용하여 code를 작성했고, 실험을 통해 signal로부터 image로 변환된 data를 augmentation할 수 있다는 것을 확인하였다. 
@@ -232,6 +252,7 @@ output으로 나온 image의 사용 목적은 DCNN의 training data로 이용하
 
 본 연구에서는 GAN의 가장 기본적인 형태의 vanilla GAN을 사용하여 가능성을 탐색하였고, 더 발전한 형태의 DCGAN, LSGAN 등을 통해 더 높은 성능의 model을 만들어 낼 수 있을 것이라 전망한다.
 
+------------------------------------------------------------------------------------------------------------------------------
 
 ## 참고 문헌
 [1] Zhang, X., Pan, X., Wang, G., Zhou, D., Tool Runout and Single-Edge Cutting in Micro-Milling, The International Journal of Advanced Manufacturing Technology, Vol. 96, No. 1, pp. 821-832, 2018.
