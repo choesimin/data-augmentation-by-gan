@@ -87,11 +87,9 @@ epoch도 batch size와 마찬가지로 적절한 결과를 얻기 위해서는 �
 ### 2.3 Training Dataset
 본 연구에서 사용하는 Train DataSet은 time-series weable motion data를 담고있는 image들이다. DCNN에 활용하기 위해 pre-processing하여 2214 pixel image로 변환한 것이며, 총 4가지 Label, (2, 3, 4, 5)로 분류된다.
 
-[Fig. 2-2]는 pre-processing이 된 image를 보기 편하게 표현해놓은 것이며, 실제 data는 22*14 크기이기 때문에 육안으로는 작고 흐릿하게 보인다.
+[Fig. 2-3]는 pre-processing이 된 image를 보기 편하게 표현해놓은 것이며, 실제 data는 22*14 크기이기 때문에 육안으로는 작고 흐릿하게 보인다.
 
-
-사진
-
+![Fig  2-3  sample data](https://user-images.githubusercontent.com/40753595/106431748-32414e00-641a-11eb-8147-517c742803ab.png)
 
 [Fig. 2-3]는 time-series data를 이용하여 규칙성이 있게 그라데이션 형태를 띄도록 만들어낸 image이다. network가 각 label의 image 특징을 추출하여 규칙성을 찾아내는 것이 model performance를 좌우할 것이다.
 
@@ -101,21 +99,87 @@ epoch도 batch size와 마찬가지로 적절한 결과를 얻기 위해서는 �
 batch size, epoch, learning rate를 조정하며, training dataset에 대한 최적값을 찾는다.
 
 ### 3.1 Case01 : Initial Condition
+![Fig  3-1  Case01 loss graph](https://user-images.githubusercontent.com/40753595/106431750-33727b00-641a-11eb-9440-e06d328f8103.png)
+- batch_size = 512
+- learning_rate_g = 0.0002
+- learning_rate_d = 0.0002
+- epochs = 300
 
+Generator의 loss가 초반에 요동친다.
+이는 learning rate가 적정치보다 높아 loss를 계산하는 함수가 수렴하지 못하고 커지는 방향으로 최적화가 이루어졌다고 볼 수 있다.
+따라서 Generator와 Discriminator의 learning rate를 낮추어 진행한다.
 
 ### 3.2 Case02 : Changed Learning rate of G & D
+![Fig  3-2  Case02 loss graph](https://user-images.githubusercontent.com/40753595/106431753-34a3a800-641a-11eb-920c-ab4171c9763d.png)
+- batch_size = 512
+- learning_rate_g = 0.0001
+- learning_rate_d = 0.0001
+- epochs = 300
 
+Generator와 Discriminator의 learning rate를 0.0001만큼 내린 결과로 graph가 요동치는 정도가 감소하였다.
+Discrimicator의 loss가 epochs 100 지점 부터 변화가 거의 없는데, 이상적인 환경에서 Discriminator의 loss는 Generator의 생성 data의 정확도가 점점 올라가기 때문에 조금씩 증가하는 모습을 보여야 한다.
+그러나 Case01에서는 Genorator가 Discriminator의 학습 속도를 따라가지 못하고 있다. Discriminator model performance가 지나치게 좋아졌기 때문에 loss값이 0으로 수렴했기 때문이다.
+따라서 Discriminator의 learning rate를 Generator의 learning rate보다 작게 설정해 Discriminator가 Generator보다 천천히 학습하도록 한다.
 
 ### 3.3 Case03 : Changed Learning rate of G
+![Fig  3-3  Case03 loss graph](https://user-images.githubusercontent.com/40753595/106431757-35d4d500-641a-11eb-9e73-e8e28876669e.png)
+- batch_size = 512
+- learning_rate_g = 0.00005
+- learning_rate_d = 0.0001
+- epochs = 300
+
+Generator와 Discriminator의 learning rate를 낮춘 결과, Case01보다 loss가 변화하는 속도는 낮아졌지만 여전히 안정적이지 못하다.
+그래서 learning rate를 실험적으로 조정해보았지만 긍정적인 변화가 없었기 때문에, batch size를 조정하며 적정값을 찾아본다.
+ 
+Deep Learning에서 batch size 512는 보편적으로 큰 값이라 평가받는다. 따라서 batch size를 256으로 낮추어 학습시킨다.
 
 
 ### 3.4 Case04 : Changed Batch Size
+![Fig  3-4  Case04 loss graph](https://user-images.githubusercontent.com/40753595/106431763-379e9880-641a-11eb-8bb4-b9a4f9409564.png)
+- batch_size = 256
+- learning_rate_g = 0.00005
+- learning_rate_d = 0.0001
+- epochs = 300	
+
+batch size를 줄이는 것이 학습에 긍정적인 영향을 주었다. loss값의 증감에 규칙성이 생겼고, 전체적인 추세를 예측할 수 있는 loss graph를 얻을 수 있었다. 
+그래프가 아직 발산 중인 것으로 보아, epochs이 수렴하기 시작하는 지점을 지날만큼  충분하지 못한 것으로 판단된다.
+
+따라서 epochs를 늘려가며 추세를 관찰해본다.
 
 
 ### 3.5 Final Case : Changed Epochs
+![Fig  3-5  Final Case_1 loss graph](https://user-images.githubusercontent.com/40753595/106431767-38372f00-641a-11eb-9158-d5587ac213fa.png)
+
+- batch_size = 256
+- learning_rate_g = 0.00005
+- learning_rate_d = 0.0001
+- epochs = 1200
+
+![Fig  3-6  Final Case_2 loss graph](https://user-images.githubusercontent.com/40753595/106431775-39685c00-641a-11eb-973d-2212f708d6a1.png)
+- batch_size = 256
+- learning_rate_g = 0.00005
+- learning_rate_d = 0.0001
+- epochs = 3600
+
+Generator와 Discriminator의 loss변화를 통해, 두 model의 학습이 어떻게 진행되었는지 Final Case_2의 loss graph를 통해 추정해볼 수 있다.
 
 
 #### 3.5.1 구간 분석
+[Epochs : 0 ~ 700] 
+
+Generator의 loss가 비교적 빠르게 증가하며, Discriminator는 반대로 천천히 감소한다.
+Generator loss 증가의 원인은 처음에 만든 Random Noise를 바탕으로 data를 생성해내어 정확도가 많이 떨어졌기 때문이고, 같은 이유로 Discriminator의 loss는 감소한다. Discriminator model performance를 Generator model performance가 따라잡아 균형이 잡힐 때까지 Generator의 loss는 계속해서 증가한다.
+
+[Epochs : 701 ~ 2000]
+
+Generator model performance가 Discriminator model performance를 따라잡아 Generator loss가 감소하고, Discriminator loss는 증가하는 구간이다.
+
+[Epochs : 2000 ~ 3600]
+
+Generator와 Discriminator이 model performance가 완전히 균형을 이루는 구간이다. 이 구간에서는 학습이 거의 일어나지 않는다.
+
+
+
 
 #### 3.5.2 Training data & Output 비교
 
