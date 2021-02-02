@@ -253,11 +253,3 @@ output으로 나온 image의 사용 목적은 DCNN의 training data로 이용하
 본 연구에서는 GAN의 가장 기본적인 형태의 vanilla GAN을 사용하여 가능성을 탐색하였고, 더 발전한 형태의 DCGAN, LSGAN 등을 통해 더 높은 성능의 model을 만들어 낼 수 있을 것이라 전망한다.
 
 ------------------------------------------------------------------------------------------------------------------------------
-
-## 참고 문헌
-[1] Zhang, X., Pan, X., Wang, G., Zhou, D., Tool Runout and Single-Edge Cutting in Micro-Milling, The International Journal of Advanced Manufacturing Technology, Vol. 96, No. 1, pp. 821-832, 2018.
-
-[2] Hong, G., Author2, Author3, Author4, Title, Journal Full Name, Vol. 1, No. 2(issue number 없을시 삭제), pp. 123-145, 2019.
-
-[3] G. Hong, Author2, Author3, Author4, Book Title, Publisher, 2019, pp. 123-145.
-
